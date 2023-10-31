@@ -1,7 +1,7 @@
 //! Optional archive of included CSL styles.
 
 use citationberg::{Locale, Style};
-use rkyv::{Archive, Deserialize, Serialize};
+use rkyv::{Archive, Deserialize, FixedUsize, Serialize};
 use serde::de::DeserializeOwned;
 use std::collections::{BTreeMap, HashMap};
 
@@ -71,7 +71,7 @@ impl ArchiveStyle {
 pub fn styles() -> impl Iterator<Item = ArchiveStyle> {
     read().map.iter().map(|(k, v)| ArchiveStyle {
         name: k.as_str(),
-        index: v.index,
+        index: v.index.into(),
         full_name: &v.full_name,
         alias: v.alias,
     })
@@ -85,15 +85,15 @@ pub fn style(s: ArchiveStyle) -> Style {
 /// Retrieve a style by name.
 pub fn style_by_name(n: &str) -> Option<Style> {
     let lookup = read();
-    let index = lookup.map.get(n)?.index;
+    let index: FixedUsize = lookup.map.get(n)?.index.into();
     Some(from_cbor::<Style>(&lookup.styles[index as usize]).unwrap())
 }
 
 /// Retrieve a style by name.
 pub fn style_by_id(n: &str) -> Option<Style> {
     let lookup = read();
-    let index = lookup.id_map.get(n)?;
-    Some(from_cbor::<Style>(&lookup.styles[*index as usize]).unwrap())
+    let index: FixedUsize = lookup.id_map.get(n)?.into();
+    Some(from_cbor::<Style>(&lookup.styles[index as usize]).unwrap())
 }
 
 /// Retrieve the locales.

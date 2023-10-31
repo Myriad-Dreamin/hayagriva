@@ -27,11 +27,11 @@ thiserror = "1.0.48"
 unic-langid = { version = "0.9.0", features = ["serde"] }
 unicode-segmentation = "1.6.0"
 unscanny = "0.1.0"
-url = { version =  "2.4", features = ["serde"] }
+url = { version = "2.4", features = ["serde"] }
 biblatex = { version = "0.8.1", optional = true }
 ciborium = { version = "0.2.1", optional = true }
 clap = { version = "3.1", optional = true, features = ["cargo"] }
-rkyv = { version = "0.7.42", optional = true }
+rkyv = { version = "0.7.42", optional = true, features = ["archive_le"] }
 strum = { version = "0.24", features = ["derive"], optional = true }
 
 [dev-dependencies]
